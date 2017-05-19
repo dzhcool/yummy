@@ -1,0 +1,106 @@
+_env:
+    - !R.env
+        _name : "base"
+        _res  :
+            - !R.vars
+                PRJ_NAME : "%{PROJECT}"
+            - !R.include
+                _path  :
+                    - "./_rg/base.yaml"
+    - !R.env
+        _name : "dev"
+        _mix  : "base,_dev"
+        _res  :
+            - !R.vars
+                ENV: "dev"
+                DOMAIN_PREFIX:  "${USER}."
+
+    - !R.env
+        _name    : "demo"
+        _mix     : "base,_demo"
+        _res :
+            - !R.vars
+                ENV: "demo"
+                DOMAIN_PREFIX:  "demo."
+
+    - !R.env
+        _name    : "beta"
+        _mix     : "base,_online"
+        _res :
+            - !R.vars
+                ENV: "beta"
+                DOMAIN_PREFIX:  "beta."
+
+    - !R.env
+        _name    : "online"
+        _mix     : "base,_online"
+        _res :
+            - !R.vars
+                ENV: "online"
+                DOMAIN_PREFIX:  ""
+
+_sys:
+#% T.need_front : {
+    -  !R.system
+        _name : "front"
+        _res  :
+            - !R.vars
+                DOMAIN   : "${DOMAIN_PREFIX}%{FNT_DOMAIN}"
+                SYS_NAME : "front"
+                SYS_PORT : "80"
+            - !R.using
+                modul : "fpm"
+            - !R.using
+                modul : "ngx"
+            - !R.using
+                modul : "yaf"
+            #- !R.daemon_php
+            #    confpath : "${USE_ROOT}"
+            #    script   : "${PRJ_ROOT}/scripts/daemon/demo.php"
+            #    tag      : "demo" #注意需要以daemon的名称作为一个tag标识
+            #    worker   : 2
+            #- !R.file_tpl
+            #    tpl    : "${PRJ_ROOT}/scripts/crontab/tpl_crontab"
+            #    dst    : "${PRJ_ROOT}/scripts/crontab/_crontab"
+            #- !R.crontab
+            #    cron : "${PRJ_ROOT}/scripts/crontab/_crontab"
+            #    sudo: true
+#% }
+
+#% T.need_admin : {
+    -  !R.system
+        _name : "admin"
+        _res  :
+            - !R.vars
+                DOMAIN   : "${DOMAIN_PREFIX}%{ADMIN_DOMAIN}"
+                SYS_NAME : "admin"
+                SYS_PORT : "8380"
+            - !R.using
+                modul : "fpm"
+            - !R.using
+                modul : "ngx"
+            - !R.using
+                modul : "yaf"
+#% }
+
+    -  !R.system
+        _name : "test"
+        _res  :
+            - !R.vars
+                SYS_NAME : "test"
+            - !R.using
+                modul : "yaf"
+            - !R.using
+                modul : "phpunit"
+
+    - !R.system
+        _name    : "init"
+        _limit:
+            envs: "demo,beta,online"
+        _res :
+            - !R.using
+                modul : "mysql"
+                args : !R.vars
+                    DB_NAME: "${PRJ_NAME}_${USER}"
+            #- !R.shell
+            #    script : "${PRJ_ROOT}/src/application/library/composer_update.sh"

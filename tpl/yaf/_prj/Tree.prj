@@ -1,0 +1,36 @@
+框架目录树结构
++ _prj //工程管理
+  |- init.sh   // 初始化脚本
+
++ _rg //rigger-ng脚本目录
+  |- base.yaml //rg基础资源
+  |- dev.yaml  //rg开发配置
+  |- run.yaml  //rg运行配置
+
++ conf //项目配置
+  |+ tpls   //配置模版
+     |- tpl_[xxx]_fpm.conf   //fpm配置文件
+     |- tpl_[xxx]_ngx.conf   //ngx配置文件
+     |- tpl_[xxx]_yaf.ini    //yaf配置文件
+     |- tpl_php.ini          //php配置文件
+  |+ used   //依据tpls翻译出最终的配置文件
+
++ src //项目源码
+  |+ application //yaf application结构
+     |+ controllers
+        |- Index.php   //默认控制器
+     |+ library        //本地类库
+     |+ models         //model目录
+     |+ modules        //其他模块
+     |+ plugins        //插件目录
+     |+ views
+        |+ index       //控制器
+           |- index.phtml //默认视图
+
++ test //单元测试
+  |+ models      //数据模型models测试
+  |+ modules     //各个模块modules测试
+  |- bootstrap   //单元测试入口
+  |- unittest.sh //单元测试执行脚步
+
+- version.txt //版本号
