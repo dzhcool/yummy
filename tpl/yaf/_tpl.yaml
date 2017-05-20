@@ -7,10 +7,6 @@ need_front: !T.bool
 need_admin: !T.bool
     prompt : "需要admin系统么?"
 
-MAIN_DOMAIN: !T.input
-    prompt : "请输入front domain:"
-    default: "main.dzhcool.com"
-
 fnt_domain: !T.input
     prompt : "请输入front domain:"
     default: "front.dzhcool.com"
