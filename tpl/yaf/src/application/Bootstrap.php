@@ -42,17 +42,21 @@ class Bootstrap extends Yaf_Bootstrap_Abstract{
         $router = Yaf_Dispatcher::getInstance()->getRouter();
         //添加配置文件中的路由
         $router->addConfig(Yaf_Registry::get("config")->routes);
-        //自定义路由测试
-        $route = new Yaf_Route_Rewrite(
-            'product/:id',
+        //自定义路由测试，: domain.com/product/123/abc
+        $route_regex = new Yaf_Route_Regex(
+            '/product\/([0-9]+)\/([a-zA-Z_0-9]+)/',
             array(
                 'module' => 'Index',
                 'controller' => 'Product',
                 'action' => 'view'
+            ),
+            array(
+                1 => 'id',
+                2 => 'name'
             )
         );
         //使用路由器装载路由协议
-        $router->addRoute('rewrite', $route);
+        $router->addRoute('regex', $route_regex);
     }
 
     public function _initLoader(){
