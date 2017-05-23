@@ -35,6 +35,7 @@ _env:
             - !R.vars
                 PHP_ERROR    : "E_ALL & ~E_NOTICE"
                 PHP_DISPLAY_ERRORS : "On"
+                PHP_OPCACHE_ENABLE : "0"
 
     - !R.env
         _name    : "_release"
@@ -42,6 +43,7 @@ _env:
             - !R.vars
                 PHP_ERROR    : "E_ERROR"
                 PHP_DISPLAY_ERRORS : "Off"
+                PHP_OPCACHE_ENABLE : "1"
 
     - !R.env
         _name    : "_speed_max"
