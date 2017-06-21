@@ -51,9 +51,9 @@ _env:
             - !R.vars
                 FPM_USER     : "nobody"
                 MAX_CHILDREN      : "500"
-                START_SERVERS     : "200"
-                MIN_SPARE_SERVERS : "200"
-                MAX_SPARE_SERVERS : "500"
+                START_SERVERS     : "20"
+                MIN_SPARE_SERVERS : "10"
+                MAX_SPARE_SERVERS : "30"
 
     - !R.env
         _name    : "_speed_min"
