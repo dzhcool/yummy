@@ -1,0 +1,13 @@
+# ansible config file
+[demo]
+    127.0.0.1
+[online]
+    127.0.0.1
+[demo:vars]
+    sys="front"
+    before_cmd= ""
+    after_cmd=""
+[online:vars]
+    sys="front"
+    before_cmd= ""
+    after_cmd=""
