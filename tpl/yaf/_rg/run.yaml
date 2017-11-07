@@ -14,6 +14,12 @@ _env:
             - !R.vars
                 ENV: "dev"
                 DOMAIN_PREFIX:  "${USER}."
+                DB_NAME      :  "yummy_${USER}"
+                DB_USER      :  "root"
+                DB_PWD       :  "123456"
+                DB_HOST      :  "127.0.0.1"
+                DB_PORT      :  "3306"
+                DB_PREFIX    :  "be_"
 
     - !R.env
         _name    : "demo"

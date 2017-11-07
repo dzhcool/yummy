@@ -12,10 +12,10 @@ _env:
         _name    : "_remote_deploy"
         _res :
             - !R.project
-                root      : "/home/x/system/${PRJ_NAME}"
+                root      : "/data/x/system/${PRJ_NAME}"
                 name      : "${PRJ_NAME}"
             - !R.vars
-                PRJ_ROOT: "/home/x/system/${PRJ_NAME}"
+                PRJ_ROOT: "/data/x/system/${PRJ_NAME}"
                 USER: "root"
 
     - !R.env
