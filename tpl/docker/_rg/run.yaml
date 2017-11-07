@@ -1,0 +1,84 @@
+_env:
+    - !R.env
+        _name : "base"
+        _res  :
+            - !R.vars
+                PRJ_NAME : "%{PROJECT}"
+            - !R.include
+                _path  :
+                    - "./_rg/base.yaml"
+    - !R.env
+        _name : "dev"
+        _mix  : "base,_dev"
+        _res  :
+            - !R.vars
+                ENV: "dev"
+                DOMAIN_PREFIX:  "${USER}."
+
+    - !R.env
+        _name    : "demo"
+        _mix     : "base,_demo"
+        _res :
+            - !R.vars
+                ENV: "demo"
+                DOMAIN_PREFIX:  "demo."
+
+    - !R.env
+        _name    : "beta"
+        _mix     : "base,_online"
+        _res :
+            - !R.vars
+                ENV: "beta"
+                DOMAIN_PREFIX:  "beta."
+
+    - !R.env
+        _name    : "online"
+        _mix     : "base,_online"
+        _res :
+            - !R.vars
+                ENV: "online"
+                DOMAIN_PREFIX:  ""
+
+_sys:
+#% T.need_front : {
+    -  !R.system
+        _name : "front"
+        _res  :
+            - !R.vars
+                DOMAIN   : "${DOMAIN_PREFIX}%{FNT_DOMAIN}"
+                SYS_NAME : "front"
+                SYS_PORT : "80"
+#% }
+
+#% T.need_admin : {
+    -  !R.system
+        _name : "admin"
+        _res  :
+            - !R.vars
+                DOMAIN   : "${DOMAIN_PREFIX}%{ADMIN_DOMAIN}"
+                SYS_NAME : "admin"
+                SYS_PORT : "8380"
+#% }
+
+    -  !R.system
+        _name : "test"
+        _res  :
+            - !R.vars
+                SYS_NAME : "test"
+            # - !R.using
+            #     modul : "yaf"
+            # - !R.using
+            #     modul : "phpunit"
+
+    - !R.system
+        _name    : "init"
+        _limit:
+            envs: "demo,beta,online"
+        _res :
+            - !R.using
+                modul : "mysql"
+                args : !R.vars
+                    DB_NAME: "${PRJ_NAME}_${USER}"
+            #- !R.shell
+            #    script : "${PRJ_ROOT}/src/application/library/composer_update.sh"
+
