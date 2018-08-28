@@ -1,17 +1,5 @@
 project: !T.input
     prompt : "请输入项目名"
 
-need_front: !T.bool
-    prompt : "需要front系统么?"
-
-need_admin: !T.bool
-    prompt : "需要admin系统么?"
-
-fnt_domain: !T.input
-    prompt : "请输入front domain:"
-    default: "front.dzhcool.com"
-
-admin_domain: !T.input
-    prompt : "请输入admin domain:"
-    default: "admin.dzhcool.com"
-
+hub: !T.input
+    prompt : "请输入Docker地址"

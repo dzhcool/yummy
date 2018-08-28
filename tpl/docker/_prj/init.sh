@@ -2,6 +2,9 @@ export PATH=.:/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/usr/
 USER=${USER/-/_}
 
 NG=/data/x/tools/rigger-ng/rg
+if [ "${PRJ_ROOT}" == "" ];then
+    PRJ_ROOT=$(cd `dirname $0`;cd ../; pwd)
+fi
 #% T.need_front : {
 
 #%}
@@ -14,23 +17,11 @@ read  yes
 if ( test "$yes" = "y")
 then
     echo "...........init data.......\n"
-#% ( T.need_front == 'TRUE' ) and ( T.need_admin == 'FALSE' ) : {
-    $NG conf,restart -e dev -s init,front,test
-#% }
-#% ( T.need_front == 'FALSE' ) and ( T.need_admin == 'TRUE' ) : {
-    $NG conf,restart -e dev -s init,admin,test
-#% }
-#% ( T.need_front == 'TRUE' ) and ( T.need_admin == 'TRUE' ) : {
-    $NG conf,restart -e dev -s init,front,admin,test
-#% }
+    ${PRJ_ROOT}/run.sh conf dev
+    ${PRJ_ROOT}/run.sh vendor
+    ${PRJ_ROOT}/run.sh build
+    ${PRJ_ROOT}/run.sh start
 else
-#% ( T.need_front == 'TRUE' ) and ( T.need_admin == 'FALSE' ) : {
-    $NG conf,restart -e dev -s front,test
-#% }
-#% ( T.need_front == 'FALSE' ) and ( T.need_admin == 'TRUE' ) : {
-    $NG conf,restart -e dev -s admin,test
-#% }
-#% ( T.need_front == 'TRUE' ) and ( T.need_admin == 'TRUE' ) : {
-    $NG conf,restart -e dev -s front,admin,test
-#% }
+    ${PRJ_ROOT}/run.sh build
+    ${PRJ_ROOT}/run.sh start
 fi

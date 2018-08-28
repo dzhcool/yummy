@@ -50,16 +50,6 @@ _sys:
                 SYS_PORT : "80"
 #% }
 
-#% T.need_admin : {
-    -  !R.system
-        _name : "admin"
-        _res  :
-            - !R.vars
-                DOMAIN   : "${DOMAIN_PREFIX}%{ADMIN_DOMAIN}"
-                SYS_NAME : "admin"
-                SYS_PORT : "8380"
-#% }
-
     -  !R.system
         _name : "test"
         _res  :
