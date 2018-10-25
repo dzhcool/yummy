@@ -60,6 +60,9 @@ _sys:
                 modul : "ngx"
             - !R.using
                 modul : "yaf"
+            # - !R.path
+            #     dst   : "${PRJ_ROOT}/tmp"
+            #     chmod : "a+w"
             #- !R.daemon_php
             #    confpath : "${USE_ROOT}"
             #    script   : "${PRJ_ROOT}/scripts/daemon/demo.php"
