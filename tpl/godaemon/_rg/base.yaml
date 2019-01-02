@@ -1,0 +1,151 @@
+_env:
+    - !R.env
+        _name    : "_local_deploy"
+        _res :
+            - !R.project
+                root      : "${HOME}/devspace/${PRJ_NAME}"
+                name      : "${PRJ_NAME}"
+            - !R.vars
+                PRJ_ROOT: "${HOME}/devspace/${PRJ_NAME}"
+
+    - !R.env
+        _name    : "_remote_deploy"
+        _res :
+            - !R.project
+                root      : "/data/x/system/${PRJ_NAME}"
+                name      : "${PRJ_NAME}"
+            - !R.vars
+                PRJ_ROOT: "/data/x/system/${PRJ_NAME}"
+                USER: "root"
+
+    - !R.env
+        _name    : "_roots"
+        _res :
+            - !R.vars
+                CONF_ROOT:  "${PRJ_ROOT}/conf"
+                RG_ROOT:  "${PRJ_ROOT}/_rg"
+                TPL_ROOT: "${CONF_ROOT}/tpls"
+                USE_ROOT: "${CONF_ROOT}/used"
+            - !R.path
+                dst  : "${CONF_ROOT}/used"
+
+    - !R.env
+        _name    : "_debug"
+        _res :
+            - !R.vars
+                PHP_ERROR    : "E_ALL & ~E_NOTICE"
+                PHP_DISPLAY_ERRORS : "On"
+                PHP_OPCACHE_ENABLE : "0"
+
+    - !R.env
+        _name    : "_release"
+        _res :
+            - !R.vars
+                PHP_ERROR    : "E_ERROR"
+                PHP_DISPLAY_ERRORS : "Off"
+                PHP_OPCACHE_ENABLE : "1"
+
+    - !R.env
+        _name    : "_speed_max"
+        _res :
+            - !R.vars
+                FPM_USER     : "nobody"
+                MAX_CHILDREN      : "500"
+                START_SERVERS     : "20"
+                MIN_SPARE_SERVERS : "10"
+                MAX_SPARE_SERVERS : "30"
+
+    - !R.env
+        _name    : "_speed_min"
+        _res :
+            - !R.vars
+                FPM_USER     : "nobody"
+                MAX_CHILDREN      : "5"
+                START_SERVERS     : "2"
+                MIN_SPARE_SERVERS : "1"
+                MAX_SPARE_SERVERS : "3"
+
+    - !R.env
+        _name    : "_php"
+        _res :
+            - !R.vars
+                PHP_PATH: "/usr/local/php-7.1"
+                PHP_BIN: "${PHP_PATH}/bin/php"
+                PHP_FPM: "${PHP_PATH}/sbin/php-fpm"
+                PHP_UNIT: "${PHP_PATH}/bin/phpunit"
+                PHP_EXT: "${PHP_PATH}/extensions"
+                PHP_INI: "${USE_ROOT}/php.ini"
+
+    - !R.env
+        _name    : "_dev"
+        _mix : "_local_deploy,_roots,_php,_speed_min,_debug"
+
+    - !R.env
+        _name    : "_demo"
+        _mix : "_remote_deploy,_roots,_php,_speed_min,_debug"
+
+    - !R.env
+        _name    : "_online"
+        _mix : "_remote_deploy,_roots,_php,_speed_max,_release"
+
+_mod:
+    - !R.modul
+        _name: "fpm"
+        _res:
+            - !R.vars
+                RUN_PATH     : "/var/run/rgapp-ng-${USER}-${PRJ_NAME}"
+                SOCK_FILE    : "${RUN_PATH}/fpm_${SYS_NAME}.sock"
+                ENV_FILE     : "${RUN_PATH}/fpm_${SYS_NAME}.env"
+            - !R.path
+                dst      : "${RUN_PATH}"
+            - !R.fpm
+                sudo     : True
+                tag      : "${SYS_NAME}"
+                ini_tpl  : "${TPL_ROOT}/tpl_php.ini"
+                ini      : "${USE_ROOT}/php.ini"
+                conf_tpl : "${TPL_ROOT}/tpl_${SYS_NAME}_fpm.conf"
+                conf     : "${USE_ROOT}/${SYS_NAME}_fpm.conf"
+
+    - !R.modul
+        _name: "ngx"
+        _res:
+            - !R.vars
+                RUN_PATH     : "/var/run/rgapp-ng-${USER}-${PRJ_NAME}"
+                SOCK_FILE    : "${RUN_PATH}/fpm_${SYS_NAME}.sock"
+            - !R.nginx_conf
+                sudo     : true
+                tpl      : "${TPL_ROOT}/tpl_${SYS_NAME}_ngx.conf"
+                src      : "${USE_ROOT}/${USER}_${SYS_NAME}_ngx.conf"
+
+    - !R.modul
+        _name: "yaf"
+        _res:
+            - !R.file_tpl
+                tpl    : "${TPL_ROOT}/tpl_${SYS_NAME}_yaf.ini"
+                dst    : "${USE_ROOT}/${SYS_NAME}_yaf.ini"
+
+    - !R.modul
+        _name: "mysql"
+        _res:
+            - !R.file_tpl
+                tpl    : "${PRJ_ROOT}/scripts/sql/tpl_create_db.sql"
+                dst    : "${PRJ_ROOT}/scripts/sql/_create_db.sql"
+            - !R.mysql
+                host:     "mysql.dzhcool.com"
+                user:     "dev"
+                password: "123456"
+                sql:      "./scripts/sql/_create_db.sql"
+
+    - !R.modul
+        _name: "phpunit"
+        _res:
+             - !R.vars
+                 TEST_PATH    : "test"
+             - !R.file_tpl
+                 tpl    : "${TPL_ROOT}/tpl_php.ini"
+                 dst    : "${USE_ROOT}/php.ini"
+             - !R.php
+                 bin     : "${PHP_BIN}"
+                 script  : "${PHP_UNIT}"
+                 ini     : "${USE_ROOT}/php.ini"
+                 args    : "--configuration ${PRJ_ROOT}/${TEST_PATH}/phpunit.xml --log-junit ${TEST_PATH}/reports/phpunit.report.xml ${TEST_PATH}"

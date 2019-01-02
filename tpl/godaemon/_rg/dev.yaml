@@ -1,0 +1,8 @@
+_dev:
+    - !C.project
+        name : "%{PROJECT}"
+        root : "${HOME}/devspace/%{PROJECT}"
+    - !C.version
+        file : "./version.txt"
+    - !C.git
+        remote : "ssh://git@git.dzhcool.com:22/data/gitdata/%{PROJECT}"

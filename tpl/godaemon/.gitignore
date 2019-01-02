@@ -1,0 +1,35 @@
+pui
+*_autoload*
+_act*
+*.swp
+*.tmp
+._pylon.dat
+.gd*
+conf/used
+tmp
+cscop*
+runtime/*
+run/*
+avatar_origin/*
+_notes
+.rigger.dat
+rigger.log
+src/apps/simple/*
+rg.fail
+nohup.out
+pkg/*
+src/github.com/*
+run.txt
+run.log
+_rg/.rigger-ng-v2.data
+ src/github.com
+ src/golang.org
+ src/gopkg.in
+ src/git.apache.org
+ src/google.golang.org
+ bin/*
+ conf/*
+ !conf/Dockerfile
+ !conf/sego.txt
+ !conf/tpls
+ /data

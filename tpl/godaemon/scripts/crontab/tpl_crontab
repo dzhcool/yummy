@@ -1,0 +1,2 @@
+#每天05:00执行demo.php
+0 5 * * * (cd ${PRJ_ROOT}; ${PHP_BIN} -c ${PHP_INI} ${PRJ_ROOT}/scripts/crontab/demo.php)
