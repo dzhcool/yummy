@@ -7,6 +7,7 @@ _env:
                 name      : "${PRJ_NAME}"
             - !R.vars
                 PRJ_ROOT: "${HOME}/devspace/${PRJ_NAME}"
+                YAF_LIBS: "${PRJ_ROOT}/libs"
 
     - !R.env
         _name    : "_remote_deploy"

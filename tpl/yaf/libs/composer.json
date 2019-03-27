@@ -1,0 +1,7 @@
+{
+    "require": {
+        "aura/sql": "^2.5",
+        "qiniu/php-sdk":  "dev-master",
+        "smarty/smarty": "^3.1"
+    }
+}

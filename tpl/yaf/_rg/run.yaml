@@ -54,15 +54,16 @@ _sys:
                 DOMAIN   : "${DOMAIN_PREFIX}%{FNT_DOMAIN}"
                 SYS_NAME : "front"
                 SYS_PORT : "80"
+                TPL_FNT_DIR : "${PRJ_ROOT}/src/app/modules/Front/views"
             - !R.using
                 modul : "fpm"
             - !R.using
                 modul : "ngx"
             - !R.using
                 modul : "yaf"
-            # - !R.path
-            #     dst   : "${PRJ_ROOT}/tmp"
-            #     chmod : "a+w"
+            - !R.path
+                dst   : "${PRJ_ROOT}/tmp"
+                chmod : "a+w"
             #- !R.daemon_php
             #    confpath : "${USE_ROOT}"
             #    script   : "${PRJ_ROOT}/scripts/daemon/demo.php"
@@ -83,7 +84,7 @@ _sys:
             - !R.vars
                 DOMAIN   : "${DOMAIN_PREFIX}%{ADMIN_DOMAIN}"
                 SYS_NAME : "admin"
-                SYS_PORT : "8380"
+                SYS_PORT : "8180"
             - !R.using
                 modul : "fpm"
             - !R.using
@@ -111,5 +112,5 @@ _sys:
                 modul : "mysql"
                 args : !R.vars
                     DB_NAME: "${PRJ_NAME}_${USER}"
-            #- !R.shell
-            #    script : "${PRJ_ROOT}/src/application/library/composer_update.sh"
+            - !R.shell
+               script : "${PRJ_ROOT}/src/app/library/composer_update.sh"
