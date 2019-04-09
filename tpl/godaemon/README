@@ -1,10 +1,5 @@
-#!/bin/sh
-# 依赖扩展获取
-# @date 2017-10-23
+# 系统要求go1.12+版本，默认使用mod模式
 
-PRJ_ROOT=$(cd `dirname $0`; pwd)
-export GOPATH=${PRJ_ROOT}
-echo "GOPATH:${GOPATH}"
 
 # go get xxx
 go get github.com/gin-gonic/gin
@@ -19,12 +14,3 @@ go get github.com/yunge/sphinx
 go get github.com/safeie/goconfig
 go get github.com/garyburd/redigo/redis
 go get github.com/pquerna/ffjson/ffjson
-
-cd ${PRJ_ROOT}/src/main
-if [ -d vendor/ ];then
-    rm -r vendor/
-fi
-govendor init
-govendor add +external
-
-exit 0

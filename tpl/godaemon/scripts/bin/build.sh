@@ -1,16 +1,16 @@
 #!/bin/bash
 
-SYS_PATH="${SYS_PATH}"
+SYS_PATH="${PRJ_ROOT}/src/${SYS_ALIAS}"
 
 TARGET_CONF_DIR="${SYS_PATH}/conf/"
 
 GOSOCK_DIR="/var/run/rgapp-${USER}-${PRJ_KEY}-${APP_SYS}/"
 
-BIN="${SYS_PATH}/bin/${PRJ_NAME}"
+BIN="${PRJ_ROOT}/bin/${SYS_ALIAS}"
 
 function clean()
 {
-    rm -rf $SYS_PATH/pkg/ $BIN $TARGET_CONF
+    rm -rf ${PRJ_ROOT}/pkg/ $BIN $TARGET_CONF
 }
 
 function check()
@@ -43,14 +43,23 @@ function conf()
     fi
 }
 
+function initMod()
+{
+    if ! test -e ${SYS_PATH}/go.mod; then
+        cd ${SYS_PATH}
+        echo "go mod init ${SYS_ALIAS}"
+        go mod init ${SYS_ALIAS}
+    fi
+}
+
 function build()
 {
     cd ${SYS_PATH}
 
-    govendor install main
-    # go install main
+    # govendor install main
+    go build .
 
-    mv "${SYS_PATH}/bin/main" $BIN
+    mv "${SYS_PATH}/${SYS_ALIAS}" $BIN
 
     if ! test -e $BIN ; then
         echo "Complie   [N]"
@@ -67,13 +76,14 @@ function gotest()
 }
 
 
-echo "***********************Config SYS-${SYS_NAME}. Please Waiting*****************************"
+echo "***********************Config SYS-${SYS_ALIAS}. Please Waiting*****************************"
 
 # check
 # clean
 # conf
+initMod
 build
 gotest
 
-echo "***********************Config SYS-${SYS_NAME}. END****************************************"
+echo "***********************Config SYS-${SYS_ALIAS}. END****************************************"
 exit 0
