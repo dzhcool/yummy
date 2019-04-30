@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# export GOPROXY="https://athens.azurefd.net"  # go下载代理
+
 SYS_PATH="${PRJ_ROOT}/src/${SYS_ALIAS}"
 
 TARGET_CONF_DIR="${SYS_PATH}/conf/"
