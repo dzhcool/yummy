@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package api;
+
+import "api/base.proto";
+
+message Book {
+    int64 id = 1;
+    string name = 2;
+    string author = 3;
+    string year = 4;
+}
+
+// book request
+message BookRequest {
+    // 基础分页参数，预留
+    int32 page = 1;
+    int32 pagesize = 2;
+
+    // 业务参数
+    int64 id = 3;
+    string name = 4;
+}
+
+// book response
+message BookResponse {
+    // 接口状态参数，预留
+    ResponseStatus errno = 1;
+    string errmsg = 2;
+
+    // 业务参数
+    Book book = 3;
+}
+
+message BooksResponse {
+    // 接口状态参数，预留
+    // int32 errno = 1;
+    ResponseStatus errno = 1;
+    string errmsg = 2;
+
+    // 业务参数
+    repeated Book book = 3;
+    int64 count = 4;
+}
